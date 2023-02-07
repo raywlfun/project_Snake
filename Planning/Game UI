@@ -1,0 +1,9 @@
+**Game User Interface**
+
+Objective: Create a game window that continuously refreshes at a given frames per second constant
+            -- Every frame should update the coordinates of the snake, as it is always moving
+            -- Food object position is continuously updated at its given coordinates
+            -- Game window should have fixed constant values:
+                ( Colours - background, snake_body, food_object, score_display )
+                ( Font / Text size - score_display, game_window captions )
+                ( Grid_square_properties - grid_square_size, snake_body_size )

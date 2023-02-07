@@ -1,0 +1,10 @@
+** Movement function**
+
+i. Should be grid-like
+    --> Every movement should + / - the x / y axis coordinates of the snake
+    --> Update positional coordinates every instance
+
+ii. Continuously call this function to simulate smooth and automatic movement
+    // Note: tKinter has a function to call a function after a specified amount of time
+        --> See people using "root.after" to repeat movement functions
+            -- Where "root" is the variable that calls the game window ("game_window" in this case).

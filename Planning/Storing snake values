@@ -1,0 +1,16 @@
+** Testing for how the snake body grows **
+
+i. The properties of the snake are perceived as elements / blocks on a grid
+    --> Each block represents a piece of the snake
+    --> As the snake grows, a new block is generated (attached to the end of the snake)
+
+ii. To store the value of the snake length, we will have to place them inside a tuple, array, or list
+    --> Tuple seems the most appropriate, as they're immutable and we're only storing numerical values
+    --> i.e. What the new length of the snake is
+
+Testing plan:
+Snake moves in a grid-like fashion;
+    --> Movement determined by fixed value of (x or y) by +/- (fixed_value)
+    --> For every fruit collected, append new (x, y) to the tail of the tuple
+    --> For general movement, take the snake's new (x, y) position at its head, insert it into the head of the tuple
+        --> Remove tail of the list so that the 2nd last index is now the last, retaining the length of the snake.

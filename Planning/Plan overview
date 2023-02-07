@@ -1,0 +1,29 @@
+Main components of the snake game to split into functions
+
+User interface
+- Game window
+- Colours
+- Labels / text
+- Snake body
+
+Score
+- Display score counter
+- Record score
+
+Game over
+- Game state = False
+
+Movement
+- every frame: update x axis and y axis positional coordinates
+- Snake moves continuously at set fps and what was the last confirmed keyboard
+      direction state.
+
+
+Snake body
+- Data structure is a tuple (x_axis, y_axis)
+    --> for every frame for the total length of the snake:
+        - Remove coordinate for x_axis and y_axis as tail [-1]
+        - Insert new coordinate for x_axis and y_axis as new position at head [0]
+
+    --> increment snake length if snake body corresponds with fruit x_axis y_axis coordinates
+

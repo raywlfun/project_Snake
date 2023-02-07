@@ -1,0 +1,25 @@
+**Detecting Keypress**
+
+// Affected functions:
+    - Snake movement
+    - Snake position
+
+Objective: Program detects when a movement key is pressed,
+            -- Call function to change direction if key pressed != current direction
+                --> Adjust snake direction from the head if new direction
+                    --> Insert snake head (x, y) position to start of index
+
+            -- Snake cannot go from left to right, right to left, up to down, down to up
+                --> [TEST] (Requires collision functionality):
+                    --> Try to perform left to right, up to down movement:
+                        - If not game_over:
+                            - Test fail
+                        if game_over:
+                            - Test pass
+
+// Refer back to this article: https://www.pythontutorial.net/tkinter/tkinter-event-binding/
+
+
+// Note:
+    - tkinter "bind" function to detect keypress
+    - Some people use lambda function; look into this
