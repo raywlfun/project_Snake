@@ -1,0 +1,19 @@
+**Collision function**
+
+// Affected functions:
+    - Snake movement
+    - Check game status
+    - Terminate game session
+
+Objective: Check if:
+            a - The snake head (index 0) positional coordinates == snake body coordinates
+            b - The snake head positional coordinates == screen boundaries
+    --> Should be called after movement functionalities
+    --> If either of these checks are true:
+        --> Call Terminate game session function
+
+        Function is continuously called every time the game window refreshes (i.e. every time the snake moves)
+
+[TEST] Primarily visual functionality test
+--> See if game stops after check == True
+    - after: colliding with body, colliding with screen boundaries
