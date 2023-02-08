@@ -5,12 +5,13 @@ import random
 # create constants
 game_screen_width = 750
 game_screen_height = 750
-game_speed = 100  # Rate of which the screen updates
+game_speed = 75  # Rate of which the screen updates
 grid_square_size = 50
 snake_body = 2
 snake_colour = "yellow"
 food_object_colour = "red"
 background_colour = "black"
+game_state = True
 
 class Snake:
     # Initialise a constructor
@@ -93,6 +94,9 @@ def update_snake_position(snake, food_object):
         food_object = Food()
 
     else:
+        # collision function check here
+        check_if_collision(snake_x_axis, snake_y_axis)
+
         # delete snake tail coordinates
         del snake.snake_body_coordinates[-1]
 
@@ -114,7 +118,8 @@ def update_game_score():
     # Remove the food object, by calling the "tag" of the food class
     game_screen.delete('food')
 
-def change_snake_direction(updated_direction):
+
+def change_snake_direction(updated_direction: str):
 
     global snake_direction
 
@@ -147,31 +152,48 @@ def detect_key_pressed():
     return
 
 
-def check_collisions():
-    pass
+def check_if_collision(snake_head_x_axis, snake_head_y_axis):
+    if snake_head_x_axis == game_screen_width or snake_head_x_axis == 0:
+        print("COLLIDED WITH WIDTH BOUNDARY")
+        game_state = False
+
+    if snake_head_y_axis == game_screen_height or snake_head_y_axis == 0:
+        print("COLLIDED WITH HEIGHT BOUNDARY")
+        game_state = False
+
+    check_game_status(game_state)
 
 
-def game_over():
-    pass
+def check_game_status(game_state):
+    if game_state == False:
+        terminate_game_session()
 
-game_window = tk.Tk()
-game_window.title("Snake game")
-game_window.resizable(False, False)
+def terminate_game_session():
+    global game_state
 
-game_score = 0
-snake_direction = 'down'
+    print(f"Collision detected: Game status = {game_state}")
+    game_state = False
 
-game_score_label = tkinter.Label(game_window, text='Score: {}'.format(game_score), font=('consolas', 40))
-game_score_label.pack()
+while game_state == True:
 
-game_screen = tkinter.Canvas(game_window, bg=background_colour, height=game_screen_height, width=game_screen_width)
-game_screen.pack()
+    game_window = tk.Tk()
+    game_window.title("Snake game")
+    game_window.resizable(False, False)
 
-# Refresh the game window
-game_window.update()
+    game_score = 0
+    snake_direction = 'down'
 
-# On bootup, allocate fixed game_window starting position
-set_startup_game_window_position()
+    game_score_label = tkinter.Label(game_window, text='Score: {}'.format(game_score), font=('times new roman', 40))
+    game_score_label.pack()
+
+    game_screen = tkinter.Canvas(game_window, bg=background_colour, height=game_screen_height, width=game_screen_width)
+    game_screen.pack()
+
+    # Refresh the game window
+    game_window.update()
+
+    # On bootup, allocate fixed game_window starting position
+    set_startup_game_window_position()
 
 # def key_pressed(event):
 #     write_label= tkinter.Label(game_window, text='Key Pressed :'+event.char)
@@ -179,11 +201,11 @@ set_startup_game_window_position()
 
 # game_window.bind('<Left>', key_pressed)
 
-detect_key_pressed()
+    detect_key_pressed()
 
-snake = Snake()
-food_objects = Food()
+    snake = Snake()
+    food_objects = Food()
 
-update_snake_position(snake, food_objects)
+    update_snake_position(snake, food_objects)
 
-game_window.mainloop()
+    game_window.mainloop()
