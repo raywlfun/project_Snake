@@ -2,53 +2,58 @@ import tkinter
 import tkinter as tk
 import random
 
-# create constants
-game_screen_width = 750
-game_screen_height = 750
-game_speed = 75  # Rate of which the screen updates
-grid_square_size = 50
-snake_body = 2
-snake_colour = "yellow"
-food_object_colour = "red"
-background_colour = "black"
-game_state = True
+# Define game window dimensions and UI properties
+GAME_SCREEN_WIDTH = 750
+GAME_SCREEN_HEIGHT = 750
+GAME_SPEED = 75  # Rate of which the screen updates
+GAME_SCORE = 0
+GRID_SQUARE_SIZE = 50
+SNAKE_BODY = 2
+
+SNAKE_DIRECTION = 'down'
+SNAKE_COLOUR = "yellow"
+FOOD_OBJECT_COLOUR = "red"
+BACKGROUND_COLOUR = "black"
+GAME_STATE = True
 
 class Snake:
     # Initialise a constructor
     def __init__(self):
-        self.snake_body_size = snake_body
-        self.snake_body_coordinates = []
+        self.SNAKE_BODY_size = SNAKE_BODY
+        self.SNAKE_BODY_coordinates = []
         self.grid_squares = []
 
         # Upon bootup, create initial snake body list of coordinates
-        for snake_body_length in range(0, snake_body):
-            print(f"snake body length = {snake_body_length}")
+        for SNAKE_BODY_length in range(0, SNAKE_BODY):
+            print(f"snake body length = {SNAKE_BODY_length}")
             # Snake appears in top left corner
-            self.snake_body_coordinates.append([100, 100])
+            self.SNAKE_BODY_coordinates.append([100, 100])
 
-        for snake_x_axis, snake_y_axis in self.snake_body_coordinates:
+        for snake_x_axis, snake_y_axis in self.SNAKE_BODY_coordinates:
 
             # Create visual of snake body by its x and y coordinates
-            snake_body_part = game_screen.create_rectangle(snake_x_axis, snake_y_axis,
-                                                  snake_x_axis + grid_square_size,
-                                                  snake_y_axis + grid_square_size,
-                                                  fill=snake_colour,
-                                                  tag="snake")
-            self.grid_squares.append(snake_body_part)
+            SNAKE_BODY_part = game_screen.create_rectangle(
+                                                            snake_x_axis, snake_y_axis,
+                                                            snake_x_axis + GRID_SQUARE_SIZE,
+                                                            snake_y_axis + GRID_SQUARE_SIZE,
+                                                            fill=SNAKE_COLOUR,tag="snake")
+            self.grid_squares.append(SNAKE_BODY_part)
 
 
 class Food:
 
     def __init__(self):
-        food_coordinate_x_axis = random.randint(0, (game_screen_width / grid_square_size) -1) * grid_square_size
-        food_coordinate_y_axis = random.randint(0, (game_screen_height / grid_square_size) -1) * grid_square_size
+        food_coordinate_x_axis = random.randint(0, (GAME_SCREEN_WIDTH / GRID_SQUARE_SIZE) -1) * GRID_SQUARE_SIZE
+        food_coordinate_y_axis = random.randint(0, (GAME_SCREEN_HEIGHT / GRID_SQUARE_SIZE) -1) * GRID_SQUARE_SIZE
 
         self.food_object_coordinates = [food_coordinate_x_axis, food_coordinate_y_axis]
 
-        game_screen.create_oval(food_coordinate_x_axis, food_coordinate_y_axis,
-                                food_coordinate_x_axis + grid_square_size,
-                                food_coordinate_y_axis + grid_square_size,
-                                fill=food_object_colour, tag='food')
+        game_screen.create_oval(
+                                food_coordinate_x_axis,
+                                food_coordinate_y_axis,
+                                food_coordinate_x_axis + GRID_SQUARE_SIZE,
+                                food_coordinate_y_axis + GRID_SQUARE_SIZE,
+                                fill=FOOD_OBJECT_COLOUR, tag='food')
 
 
 def set_startup_game_window_position():
@@ -65,45 +70,45 @@ def set_startup_game_window_position():
 
 def update_snake_position(snake, food_object):
 
-    snake_x_axis, snake_y_axis = snake.snake_body_coordinates[0]
+    # Assign coordinates of the snake head
+    snake_x_axis, snake_y_axis = snake.SNAKE_BODY_coordinates[0]
+    # print(snake.SNAKE_BODY_coordinates[0])
 
-    # Increment / Decrement x or y axis coordinates of the snake
-    if snake_direction == 'up':
-        snake_y_axis -= grid_square_size
-    elif snake_direction == 'down':
-        snake_y_axis += grid_square_size
-    elif snake_direction == 'right':
-        snake_x_axis += grid_square_size
-    elif snake_direction == 'left':
-        snake_x_axis -= grid_square_size
+    # Increment / Decrement x or y coordinates of the snake
+    if SNAKE_DIRECTION == 'up':
+        snake_y_axis -= GRID_SQUARE_SIZE
+    elif SNAKE_DIRECTION == 'down':
+        snake_y_axis += GRID_SQUARE_SIZE
+    elif SNAKE_DIRECTION == 'right':
+        snake_x_axis += GRID_SQUARE_SIZE
+    elif SNAKE_DIRECTION == 'left':
+        snake_x_axis -= GRID_SQUARE_SIZE
 
     # update coordinates of the head of the snake, by inserting to index 0
-    snake.snake_body_coordinates.insert(0, (snake_x_axis, snake_y_axis))
+    snake.SNAKE_BODY_coordinates.insert(0, (snake_x_axis, snake_y_axis))
 
     grid_square_coordinate = game_screen.create_rectangle(snake_x_axis, snake_y_axis,
-                                          snake_x_axis + grid_square_size,
-                                          snake_y_axis + grid_square_size,
-                                          fill=snake_colour)
+                                          snake_x_axis + GRID_SQUARE_SIZE,
+                                          snake_y_axis + GRID_SQUARE_SIZE,
+                                          fill=SNAKE_COLOUR)
 
     snake.grid_squares.insert(0, grid_square_coordinate)
 
     # Check if snake position == food object position
-    if snake_x_axis == food_object.food_object_coordinates[0] and snake_y_axis == food_object.food_object_coordinates[1]:
+    if snake_x_axis == food_object.food_object_coordinates[0] and \
+            snake_y_axis == food_object.food_object_coordinates[1]:
         update_game_score()
 
         # Call a new randomised instance of the food object
         food_object = Food()
-
     else:
-
-
         # delete snake tail coordinates
-        del snake.snake_body_coordinates[-1]
+        del snake.SNAKE_BODY_coordinates[-1]
         game_screen.delete(snake.grid_squares[-1])
         del snake.grid_squares[-1]
 
     # Simulate automatic movement by continuously calling this function
-    game_window.after(game_speed, update_snake_position, snake, food_object)
+    game_window.after(GAME_SPEED, update_snake_position, snake, food_object)
 
     # collision function check here
     check_if_collision(snake_x_axis, snake_y_axis)
@@ -111,11 +116,11 @@ def update_snake_position(snake, food_object):
     return
 
 def update_game_score():
-    global game_score
-    game_score += 1
+    global GAME_SCORE
+    GAME_SCORE += 1
 
     # Display the score
-    game_score_label.config(text='Score:{}'.format(game_score))
+    GAME_SCORE_label.config(text='Score:{}'.format(GAME_SCORE))
 
     # Remove the food object, by calling the "tag" of the food class
     game_screen.delete('food')
@@ -123,25 +128,25 @@ def update_game_score():
 
 def change_snake_direction(updated_direction: str):
 
-    global snake_direction
+    global SNAKE_DIRECTION
 
     if updated_direction == 'left':
-        if snake_direction != 'right':
-            snake_direction = updated_direction
+        if SNAKE_DIRECTION != 'right':
+            SNAKE_DIRECTION = updated_direction
 
     elif updated_direction == 'right':
-        if snake_direction != 'left':
-            snake_direction = updated_direction
+        if SNAKE_DIRECTION != 'left':
+            SNAKE_DIRECTION = updated_direction
 
     elif updated_direction == 'up':
-        if snake_direction != 'down':
-            snake_direction = updated_direction
+        if SNAKE_DIRECTION != 'down':
+            SNAKE_DIRECTION = updated_direction
 
     elif updated_direction == 'down':
-        if snake_direction != 'up':
-            snake_direction = updated_direction
+        if SNAKE_DIRECTION != 'up':
+            SNAKE_DIRECTION = updated_direction
 
-    return snake_direction
+    return SNAKE_DIRECTION
 
 
 def detect_key_pressed():
@@ -156,41 +161,50 @@ def detect_key_pressed():
 
 def check_if_collision(snake_head_x_axis, snake_head_y_axis):
 
-    if snake_head_x_axis == game_screen_width or snake_head_x_axis == -50:
+    # Check if snake collides with walls
+    if snake_head_x_axis == GAME_SCREEN_WIDTH or \
+            snake_head_x_axis == -50:
         print("COLLIDED WITH WIDTH BOUNDARY")
         terminate_game_session()
 
-    if snake_head_y_axis == game_screen_height or snake_head_y_axis == -50:
+    if snake_head_y_axis == GAME_SCREEN_HEIGHT or \
+            snake_head_y_axis == -50:
         print("COLLIDED WITH HEIGHT BOUNDARY")
         terminate_game_session()
 
-
-# def check_game_status(game_state):
-#     if game_state == False:
-#         terminate_game_session()
+    # Check if snake collides with itself
+    for SNAKE_BODY_part in snake.SNAKE_BODY_coordinates[1:]:
+        if snake_head_x_axis == SNAKE_BODY_part[0] and \
+                snake_head_y_axis == SNAKE_BODY_part[1]:
+            print("COLLIDED WITH SNAKE")
+            terminate_game_session()
 
 def terminate_game_session():
-    global game_state
+    global GAME_STATE
 
-    print(f"Collision detected: Game status = {game_state}")
-    game_state = False
+    print(f"Collision detected: Game status = {GAME_STATE}")
+    GAME_STATE = False
 
-    #Terminate game window and all running application processes
+    # Terminate game window and all running application processes
     game_window.destroy()
 
-while game_state == True:
+while GAME_STATE == True:
 
     game_window = tk.Tk()
     game_window.title("Snake game")
     game_window.resizable(False, False)
 
-    game_score = 0
-    snake_direction = 'down'
 
-    game_score_label = tkinter.Label(game_window, text='Score: {}'.format(game_score), font=('times new roman', 40))
-    game_score_label.pack()
 
-    game_screen = tkinter.Canvas(game_window, bg=background_colour, height=game_screen_height, width=game_screen_width)
+    GAME_SCORE_label = tkinter.Label(game_window,
+                                     text='Score: {}'.format(GAME_SCORE),
+                                     font=('times new roman', 40))
+    GAME_SCORE_label.pack()
+
+    game_screen = tkinter.Canvas(game_window,
+                                 bg=BACKGROUND_COLOUR,
+                                 height=GAME_SCREEN_HEIGHT,
+                                 width=GAME_SCREEN_WIDTH)
     game_screen.pack()
 
     # Refresh the game window
@@ -198,12 +212,6 @@ while game_state == True:
 
     # On bootup, allocate fixed game_window starting position
     set_startup_game_window_position()
-
-# def key_pressed(event):
-#     write_label= tkinter.Label(game_window, text='Key Pressed :'+event.char)
-#     write_label.place(x=80, y=90)
-
-# game_window.bind('<Left>', key_pressed)
 
     detect_key_pressed()
 
