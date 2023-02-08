@@ -19,25 +19,25 @@ GAME_STATE = True
 class Snake:
     # Initialise a constructor
     def __init__(self):
-        self.SNAKE_BODY_size = SNAKE_BODY
-        self.SNAKE_BODY_coordinates = []
+        self.snake_body_size = SNAKE_BODY
+        self.snake_body_coordinates = []
         self.grid_squares = []
 
         # Upon bootup, create initial snake body list of coordinates
-        for SNAKE_BODY_length in range(0, SNAKE_BODY):
-            print(f"snake body length = {SNAKE_BODY_length}")
+        for snake_body_length in range(0, SNAKE_BODY):
+            print(f"snake body length = {snake_body_length}")
             # Snake appears in top left corner
-            self.SNAKE_BODY_coordinates.append([100, 100])
+            self.snake_body_coordinates.append([100, 100])
 
-        for snake_x_axis, snake_y_axis in self.SNAKE_BODY_coordinates:
+        for snake_x_axis, snake_y_axis in self.snake_body_coordinates:
 
             # Create visual of snake body by its x and y coordinates
-            SNAKE_BODY_part = game_screen.create_rectangle(
+            snake_body_part = game_screen.create_rectangle(
                                                             snake_x_axis, snake_y_axis,
                                                             snake_x_axis + GRID_SQUARE_SIZE,
                                                             snake_y_axis + GRID_SQUARE_SIZE,
                                                             fill=SNAKE_COLOUR,tag="snake")
-            self.grid_squares.append(SNAKE_BODY_part)
+            self.grid_squares.append(snake_body_part)
 
 
 class Food:
@@ -71,8 +71,8 @@ def set_startup_game_window_position():
 def update_snake_position(snake, food_object):
 
     # Assign coordinates of the snake head
-    snake_x_axis, snake_y_axis = snake.SNAKE_BODY_coordinates[0]
-    # print(snake.SNAKE_BODY_coordinates[0])
+    snake_x_axis, snake_y_axis = snake.snake_body_coordinates[0]
+    # print(snake.snake_body_coordinates[0])
 
     # Increment / Decrement x or y coordinates of the snake
     if SNAKE_DIRECTION == 'up':
@@ -85,7 +85,7 @@ def update_snake_position(snake, food_object):
         snake_x_axis -= GRID_SQUARE_SIZE
 
     # update coordinates of the head of the snake, by inserting to index 0
-    snake.SNAKE_BODY_coordinates.insert(0, (snake_x_axis, snake_y_axis))
+    snake.snake_body_coordinates.insert(0, (snake_x_axis, snake_y_axis))
 
     grid_square_coordinate = game_screen.create_rectangle(snake_x_axis, snake_y_axis,
                                           snake_x_axis + GRID_SQUARE_SIZE,
@@ -103,7 +103,7 @@ def update_snake_position(snake, food_object):
         food_object = Food()
     else:
         # delete snake tail coordinates
-        del snake.SNAKE_BODY_coordinates[-1]
+        del snake.snake_body_coordinates[-1]
         game_screen.delete(snake.grid_squares[-1])
         del snake.grid_squares[-1]
 
@@ -173,9 +173,9 @@ def check_if_collision(snake_head_x_axis, snake_head_y_axis):
         terminate_game_session()
 
     # Check if snake collides with itself
-    for SNAKE_BODY_part in snake.SNAKE_BODY_coordinates[1:]:
-        if snake_head_x_axis == SNAKE_BODY_part[0] and \
-                snake_head_y_axis == SNAKE_BODY_part[1]:
+    for snake_body_part in snake.snake_body_coordinates[1:]:
+        if snake_head_x_axis == snake_body_part[0] and \
+                snake_head_y_axis == snake_body_part[1]:
             print("COLLIDED WITH SNAKE")
             terminate_game_session()
 
