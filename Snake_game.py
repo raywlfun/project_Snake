@@ -20,20 +20,21 @@ class Snake:
         self.snake_body_coordinates = []
         self.grid_squares = []
 
-        # Create list of coordinates
-        for i in range(0, snake_body):
-            print(f"i = {i}")
+        # Upon bootup, create initial snake body list of coordinates
+        for snake_body_length in range(0, snake_body):
+            print(f"snake body length = {snake_body_length}")
             # Snake appears in top left corner
-            self.snake_body_coordinates.append([0, 0])
+            self.snake_body_coordinates.append([100, 100])
 
         for snake_x_axis, snake_y_axis in self.snake_body_coordinates:
-            square = game_screen.create_rectangle(snake_x_axis, snake_y_axis,
+
+            # Create visual of snake body by its x and y coordinates
+            snake_body_part = game_screen.create_rectangle(snake_x_axis, snake_y_axis,
                                                   snake_x_axis + grid_square_size,
                                                   snake_y_axis + grid_square_size,
                                                   fill=snake_colour,
                                                   tag="snake")
-            print(square)
-            self.grid_squares.append(square)
+            self.grid_squares.append(snake_body_part)
 
 
 class Food:
@@ -94,19 +95,20 @@ def update_snake_position(snake, food_object):
         food_object = Food()
 
     else:
-        # collision function check here
-        check_if_collision(snake_x_axis, snake_y_axis)
+
 
         # delete snake tail coordinates
         del snake.snake_body_coordinates[-1]
-
         game_screen.delete(snake.grid_squares[-1])
-
         del snake.grid_squares[-1]
 
     # Simulate automatic movement by continuously calling this function
     game_window.after(game_speed, update_snake_position, snake, food_object)
 
+    # collision function check here
+    check_if_collision(snake_x_axis, snake_y_axis)
+
+    return
 
 def update_game_score():
     global game_score
@@ -153,26 +155,28 @@ def detect_key_pressed():
 
 
 def check_if_collision(snake_head_x_axis, snake_head_y_axis):
-    if snake_head_x_axis == game_screen_width or snake_head_x_axis == 0:
+
+    if snake_head_x_axis == game_screen_width or snake_head_x_axis == -50:
         print("COLLIDED WITH WIDTH BOUNDARY")
-        game_state = False
-
-    if snake_head_y_axis == game_screen_height or snake_head_y_axis == 0:
-        print("COLLIDED WITH HEIGHT BOUNDARY")
-        game_state = False
-
-    check_game_status(game_state)
-
-
-def check_game_status(game_state):
-    if game_state == False:
         terminate_game_session()
+
+    if snake_head_y_axis == game_screen_height or snake_head_y_axis == -50:
+        print("COLLIDED WITH HEIGHT BOUNDARY")
+        terminate_game_session()
+
+
+# def check_game_status(game_state):
+#     if game_state == False:
+#         terminate_game_session()
 
 def terminate_game_session():
     global game_state
 
     print(f"Collision detected: Game status = {game_state}")
     game_state = False
+
+    #Terminate game window and all running application processes
+    game_window.destroy()
 
 while game_state == True:
 
